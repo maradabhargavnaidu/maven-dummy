@@ -1,0 +1,38 @@
+name: Build and Push to GAR
+
+on:
+ workflow_dispatch
+env:
+  PROJECT_ID: project-7909eb0c-53df-4426-b83
+  GAR_LOCATION: asia-south1
+  REPOSITORY: first-gar
+  IMAGE: dummyspringapp
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions: 
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          
+      - name: Build Spring Boot App
+        run: mvn clean package -DskipTests
+
+      - name: Authenticate to google cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure Docker for GAR
+        run: |
+          gcloud auth configure-docker $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/REPOSITORY?$IMAGE:${{ github.sha }} .
+
+      - name: Push Docker Image
+        run: |
+          docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.sha }}
