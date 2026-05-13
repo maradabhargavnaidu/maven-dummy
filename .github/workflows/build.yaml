@@ -59,7 +59,7 @@ jobs:
       #  Push Docker image
       - name: Push Docker Image
         run: |
-          docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.sha }}
+          docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.run_id }}
 
       # # OPTIONAL: Trigger Team B Cloud Build
       # - name: Trigger Team B Cloud Build
