@@ -54,7 +54,7 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build \
-          -t $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.sha }} .
+          -t $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:${{ github.run_id }} .
 
       #  Push Docker image
       - name: Push Docker Image
